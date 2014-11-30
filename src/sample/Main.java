@@ -2,8 +2,6 @@ package sample;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -53,12 +51,21 @@ public class Main extends Application {
                 double clickY = event.getSceneY();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).isTouched(clickX, clickY)) {
-                        group1.addToGroup(list.get(i));
+
+                        Shape current = list.get(circle);
+                        Shape selected = list.get(i);
+                        if (current == selected) {
+                            return;
+                        }
+                        group1.addToGroup(current);
+                        group1.addToGroup(selected);
                         group1.draw();
-                        list.remove(i);
+                        list.remove(current);
+                        list.remove(selected);
                     }
                 }
                 list.add(group1);
+                circle = list.size() - 1;
             }
         });
     }
@@ -70,7 +77,7 @@ public class Main extends Application {
                 //Add oval
                 if (event.getCode() == KeyCode.DIGIT1) {
                     list.add(new Oval(gc));
-                    list.get(list.size()-1).clean();
+                    list.get(list.size() - 1).clean();
                     for (int i = 0; i < list.size(); i++) {
                         list.get(i).draw();
                     }
@@ -80,7 +87,7 @@ public class Main extends Application {
                 //Add square
                 if (event.getCode() == KeyCode.DIGIT2) {
                     list.add(new Square(gc));
-                    list.get(list.size()-1).clean();
+                    list.get(list.size() - 1).clean();
                     for (int i = 0; i < list.size(); i++) {
                         list.get(i).draw();
                     }
@@ -90,7 +97,7 @@ public class Main extends Application {
                 //Add triangle
                 if (event.getCode() == KeyCode.DIGIT3) {
                     list.add(new Triangle(gc));
-                    list.get(list.size()-1).clean();
+                    list.get(list.size() - 1).clean();
                     for (int i = 0; i < list.size(); i++) {
                         list.get(i).draw();
                     }
@@ -99,10 +106,10 @@ public class Main extends Application {
                 }
                 //Switch forward between shapes and shapes group
                 if (event.getCode() == KeyCode.A) {
-                        circle--;
-                        if (circle < 0) {
-                            circle = 0;
-                        }
+                    circle--;
+                    if (circle < 0) {
+                        circle = 0;
+                    }
 
                 }
                 //Switch backward between shapes and shapes group
@@ -140,7 +147,7 @@ public class Main extends Application {
             }
 
         });
-        }
+    }
 
     public static void main(String[] args) {
         launch(args);
